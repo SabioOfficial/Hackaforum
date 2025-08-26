@@ -78,7 +78,7 @@ def view(post_id, category):
     db = load_db()
 
     if category:
-        posts = [p for p in db["posts"] if p["category"] == category]
+        posts = [(i, p) for i, p in enumerate(db["posts"]) if p["category"] == category]
         if not posts:
             console.print(f"[yellow]No posts found in {category}[/]")
             return
@@ -88,7 +88,7 @@ def view(post_id, category):
         table.add_column("Title", style="bold")
         table.add_column("Replies", style="magenta")
 
-        for i, post in enumerate(posts):
+        for i, post in posts:
             table.add_row(str(i), post["title"], str(len(post["replies"])))
 
         console.print(table)
@@ -101,7 +101,7 @@ def view(post_id, category):
             console.print(post["content"])
             console.rule("Replies")
             if not post["replies"]:
-                console.print("[dim]Not replies yet[/]")
+                console.print("[dim]No replies yet[/]")
             else:
                 for i, reply in enumerate(post["replies"]):
                     console.print(f"[{i}] {reply}")
